@@ -1,0 +1,13 @@
+/*font*/
+@import "http://at.alicdn.com/t/font_1461901867_615965.css";
+/*js-dep*/
+@import url(../js/plugin/layer/need/layer.css);
+@import url(../js/plugin/layer/need/layer_diy.css);
+@import url(../js/plugin/mobiscroll/mobiscroll.css);
+@import url(../js/plugin/area/area.css);
+@import url(styles/swiper.css);
+/*rest*/
+@import url(styles/normalize.css);
+@import url(styles/responsive.css);
+/*start*/
+@import url(styles/diy.css);

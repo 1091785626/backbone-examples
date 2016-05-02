@@ -1,0 +1,15 @@
+<a href="#goods/{{!it.id}}">
+	<img class="lazy" data-original="{{=it.img}}" alt="">
+</a>
+
+	<div class="goods-title twoline">
+		<div class="btn01 btn-red js-put nowrap white" data-id="{{=it.id}}">改变我：	{{=it.title}}</div>
+	</div>
+<div class="goods-price">
+	<span class="btn01 btn-disabled js-del nowrap white" data-id="{{=it.id}}">删除</span>
+</div>
+<div class="goods-active nowrap">
+	<div class="btn01 lh-3 pd-l"><small class="js-open oneline" data-id="{{=it.id}}">查看，绑定data-id={{=it.id}}</small></div>
+</div>
+
+

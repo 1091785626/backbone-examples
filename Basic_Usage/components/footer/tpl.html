@@ -1,0 +1,50 @@
+<style>
+.footer-nav{
+	background:white;
+	position:fixed;
+	bottom:0;
+	left:0;
+	right:0;
+	width:100%;
+	margin:auto;
+	border-top:1px solid #e6e9ed;
+    z-index:8;
+}
+.footer-nav a{
+	width:25%;
+	float:left;
+	text-align: center;
+	font-size: 1.1rem;
+}
+.footer-nav i{
+	padding-top:.5rem;
+	width: 2rem;
+	line-height: 2.0rem;
+}
+.footer-style-0{
+	padding:1.0rem 0;
+	line-height: 2.0rem;
+	font-size:1.3rem;
+}
+.footer-style-0 a:not(:first-child){
+	border-left:1px solid #e6e9ed;
+}
+</style>
+<footer class="footer-nav {{?!it.style}}footer-style-0{{?}} media-fixed row">
+	<div class="bd-b lh-3 btn01 {{?it.style}}js-footer-put{{??}}btn-disabled js-footer-destroy{{?}} media-fixed">
+		<b class="red">Restful</b>
+		{{?it.style}} put方法{{??}} delete方法{{?}} footer-style：{{=it.style}} 
+		<b>点击测试</b>
+	</div>
+	<div class="bd-b media-fixed"></div>
+    {{~it.data:v:index}}
+        <a href="">
+        	{{?it.style}}
+            <i class="iconfont">{{=v.icon}}</i><br>
+            {{?}}
+            <span>
+            		{{=v.title}}
+            </span>
+        </a>
+    {{~}}
+</footer>

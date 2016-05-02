@@ -1,0 +1,23 @@
+{{?it.style==2}}
+<div class="diy-conitem" style="margin:{{=it.m_tb}} 0;">
+    {{~it.item_list:v:index}}
+        <a href="{{=v.url}}">
+            <img class="lazy" data-original="{{=v.img}}" style="width:100%;padding:{{=it.pd_tb}} 0" alt="{{=v.title}}">
+        </a>    
+    {{~}}
+</div>
+{{??}}
+<div class="swiper-container swiper-banner" style="margin:{{=it.m_tb}} 0;height:50vw">
+    <div class="swiper-wrapper">
+        {{~it.item_list:v:index}}
+        <div class="swiper-slide">
+            <a href="{{=v.url}}" style="overflow:hidden;display:inline-block">
+                <img class="swiper-lazy" data-src="{{=v.img}}"  style="width:100%;" alt="{{=v.title}}">
+            </a>
+            <div class="swiper-lazy-preloader"></div> 
+        </div>
+        {{~}}
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+{{?}}

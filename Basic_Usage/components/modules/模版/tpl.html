@@ -1,0 +1,12 @@
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        {{~it.item_list:v:index}}
+        <div class="swiper-slide">
+            <a href="{{=v.id}}">
+            	<img class="swiper-lazy" data-src="{{=v.img}}"  style="width:100%;">
+            </a>    
+        </div>
+        {{~}}
+    </div>
+    <div class="swiper-pagination"></div>
+</div>

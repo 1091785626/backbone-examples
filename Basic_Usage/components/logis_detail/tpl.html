@@ -1,0 +1,97 @@
+
+<style> 
+#logis-detail {
+    background: white; 
+}
+#logis-detail a {
+    text-decoration: none;
+}
+#logis-detail a:hover {
+    text-decoration: underline;
+}
+#logis-detail .logis-list-wrap {
+    max-height: 0;
+}
+
+#logis-detail .logis-list-wrap .logis-list {
+    border-top: 1px solid #eee;
+    margin: 0 15px;
+    padding: 15px 0;
+}
+#logis-detail .logis-list-wrap .logis-list ul {
+    max-height: 255px;
+    padding-left: 75px;
+    padding-right: 20px;
+    height: 626px;
+}
+#logis-detail .logis-list-wrap .logis-list li {
+    position: relative;
+    border-bottom: 1px solid #f5f5f5;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    color: #666;
+}
+#logis-detail .logis-list-wrap .logis-list li.logis-first {
+    color: #fc6e51;
+}
+#logis-detail .logis-list-wrap .logis-list li p {
+    line-height: 20px;
+}
+#logis-detail .logis-list-wrap .logis-list li .logis-before {
+    position: absolute;
+    left: -13px;
+    top: 2.2em;
+    height: 82%;
+    width: 0;
+    border-left: 2px solid #ddd;
+}
+#logis-detail .logis-list-wrap .logis-list li .logis-after {
+    position: absolute;
+    left: -16px;
+    top: 1.2em;
+    width: 8px;
+    height: 8px;
+    background: #ddd;
+    border-radius: 6px;
+}
+#logis-detail .logis-list-wrap .logis-list li.logis-first .logis-after {
+    background: #fc6e51;
+}
+#logis-detail .logis-icon-new {
+    position: absolute;
+    left: -20px;
+    top: 1.5em;
+    width: 41px;
+    height: 18px;
+    margin-left: -41px;
+    margin-top: -9px;
+    background-position: 0 -58px;
+}
+
+</style>
+<div class="bg-fixed close"></div>
+<div class="fixed">
+    <p class="close-position tc">物流详情<i class="iconfont close">&#xe623;</i></p>
+    <section style="overflow: scroll;height:32rem;">
+        <div id="logis-detail">
+            <div class="logis-list-wrap logis-unfold">
+                <div class="logis-list">
+                    <ul>
+                    	{{?it.status==0}}
+                    	暂时没有物流信息
+                    	{{??}}
+                        {{~it.data:v:index}}
+                        <li {{?index==0}}class="logis-first"{{?}}>
+                            <p>{{=v.time}}</p>
+                            <p>{{=v.context}}</p>
+                            <span class="logis-before"></span><span class="logis-after"></span>
+                            {{?index==0}}<i class="logis-icon-new">最新</i>{{?}}
+                        </li>
+                        {{~}}
+                        {{?}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

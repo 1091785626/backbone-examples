@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+	<meta name="format-detection"content="telephone=no"/>
+	<meta name="format-detection"content="email=no"/>
+	<link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+<script>
+      //定义全局变量；可以从后台获取
+      var _global={
+            "user":"Deot",   
+            "id":123
+      }
+</script>
+<div id="views"></div>
+<div class="loading-modal"></div>
+<div id="panel-user"></div>
+<div id="popup"></div>
+<script>
+//一个简单实现自适应根据rem
+;(function (doc, win) {
+      var docEle=doc.documentElement;
+      var resizeEvent='orientationchange' in window ? 'orientationchange' : 'resize';
+      var recalCulate=function () {
+            var width=docEle.clientWidth;
+            var fontsize=docEle.style.fontSize;
+            width<=414 ? fontsize=(width/320)*62.5+'%':fontsize=80.859375+'%';    
+        };
+      recalCulate();
+      if(!doc.addEventListener)return;
+      win.addEventListener(resizeEvent,recalCulate,false);
+})(document, window);
+</script>
+<!--js入口-->
+<script src="js/lib/require.js" data-main="js/main"></script>
+</body>
+</html>
+

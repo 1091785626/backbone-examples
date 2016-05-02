@@ -1,0 +1,101 @@
+/*layer fix*/
+.layermbtn span:not(:last-child) {
+  background-color: transparent;
+}
+
+.layermbtn span {
+  color: #0894ec;
+  font-weight: 500;
+}
+
+.layermchild {
+  border-radius: .6rem !important;
+}
+
+.laymshade {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.layermcont {
+  padding: 15px;
+}
+.layermchild{
+  max-width: 24rem !important;
+}
+/*layer diy*/
+.layer-init {
+  min-width: 22rem !important;
+  font-size: 1.3rem !important;
+}
+.layer-init.padding-none {
+  padding: 0;
+}
+.layer-init.padding-normal .layermcont {
+  padding: 1rem;
+}
+.layer-init .layermcont {
+  padding: 2.5rem 1rem 2rem 1rem;
+  line-height: 2.0rem;
+  color: #444;
+}
+.layer-init h3 {
+  padding: 0;
+  line-height: 4.0rem;
+  height: 4.0rem;
+  font-size: 1.4rem;
+  text-align: center;
+  font-weight: bold;
+}
+.layer-init .layermend {
+  top: 1rem;
+  right: 0;
+  width: 3rem;
+  height: 3rem;
+  border: 0;
+  font-size: none;
+}
+.layer-init .layermend::after, .layer-init .layermend::before {
+  position: absolute;
+  left: .5rem;
+  top: 1rem;
+  content: '';
+  width: 1.8rem;
+  height: .13rem;
+  background-color: #444;
+  border-radius: 3px;
+}
+.layer-init .layermbtn:before {
+  width: 0;
+}
+.layer-init .layermbtn {
+  border: none;
+  line-height: 3.2rem;
+  height: 3.2rem;
+  margin-bottom: 1.5rem;
+}
+.layer-init .layermbtn span {
+  font-size: 1.3rem;
+  color: white;
+  width: 9rem;
+  border-radius: 4px;
+  margin: 0 .5rem;
+}
+.layer-init .layermbtn span:first-child {
+  height: 3.2rem;
+}
+.layer-init .layermbtn span[type='0'] {
+  background: #ccc;
+}
+.layer-init .layermbtn span[type='1'] {
+  background: #36bc9b;
+}
+
+.layer-toast {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 1.5rem;
+}
+.layer-toast .layermcont {
+  color: white;
+  padding: 0 1rem;
+  line-height: 3rem;
+}
