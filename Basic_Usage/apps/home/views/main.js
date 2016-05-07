@@ -15,6 +15,7 @@ define(["doT",
 	   		this.model = new Model(urlApi);
 	   		this.model.on('sync',this.render,this);
 	   		this.model.fetch({
+	   			data:{id:123},
                 error:function(){
                     $.catchError();
                 }
@@ -39,7 +40,7 @@ define(["doT",
         },
         renderModule: function(type, model) {//通过厉遍形式渲染页面;
 			var Module = require("components/modules/" + type + "/view");
-			var moduleName = $('<div class="modules-' + type + '"></div>');
+			var moduleName = $('<div class=modules-' + type + '></div>');
 			$(".view-container", this.$el).append(moduleName);
         	var moduleView = new Module({model: model});
 			moduleName.html(moduleView.$el);

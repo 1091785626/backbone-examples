@@ -3,8 +3,8 @@ define(function() {
         initialize:function(url){
         	this.urlApi=url;
         },
-        url:function(){
-            return this.urlApi+'/'+_global.id;
+        urlRoot:function(){
+            return this.urlApi;
         }
     });
 });

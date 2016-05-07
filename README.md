@@ -5,9 +5,9 @@
 感谢以下的博客
 
 * [Backbone API中文文档](http://www.css88.com/doc/backbone/)
-* [Backbone 使用总结](https://segmentfault.com/a/1190000000589218) 
+* [Backbone 使用总结，内存泄漏等](https://segmentfault.com/a/1190000000589218) 
 * [Backbone 的技巧和模式](http://blog.jobbole.com/46420/)
-
+* [我的启蒙老师：工程化，模块化，组件化](https://github.com/fouber/blog/issues/10)
 
 ###项目其他依赖，UI及其他方法自己定义，毕竟Backbone只提供了MVC框架
  
@@ -17,6 +17,9 @@
 * fastclick.js
 * swiper.js
 * .....
+
+##如果你对构建没有兴趣的话就直接看第三部分
+
 
 ###一、项目的目录及其功能，方便管理
 <pre>
@@ -57,7 +60,212 @@ Backbone
 │                   
 └─index.html               项目的单页面入口，可以在这里定义全局的变量；
 </pre>
+
 ###二、项目构建
+首页是index.html;
+```javascript
+  var _global= {
+        user    : "Deot",
+        id      : 123,
+        mobile  :123
+  };//全局变量 _global.mobile可以变成一个经常复用的参数等.....
+```
+```html
+<div id="views"></div>              <!--所有页面渲染时插入到这里；-->
+<div class="loading-modal"></div>   <!--加载动画；-->
+<div id="popup"></div>              <!--弹出层时渲染到这里；-->
+```
+接下来就是require->main.js
+####路由部分：route.js
+<pre>
+//在这里，我们可以定义简单的插件，同样会暴露到全局；复用很方便，所以在这里可以自定义方法；
+$.loading = function(){/*相关loading代码*/};
+//比如加载动画
+$.pageInit = function(){/*页面初始化代码*/};
+//简单粗暴的empty,清空dom，然后进入一下个路由页面，页面生命周期，你也可以使用其他方式；必然过场动画；
+$.catchError = function(){/*数据异常时执行*/};
+//数据异常
+$.getUrlParam = function(){/*路由地址?id=123&user=Deot*/};
+//读取URL地址所带信息
+．．．．
+．．．．
+方法还有很多，这里相对于jQuery简单扩展，如果需要比较大的，请放入utils中；
+
+</pre>
+
+<pre>
+routes: {
+    '':'home',                  主页面
+    'user(/:action)':'user',    一二三及页面，用于判断页面二三级路由
+    'goods/:id':'goods',        带参数
+    'list':'list',              单一页面
+    '*actions': 'defaultAction' 404页面
+}
+</pre>
+
+<pre>
+initialize: function () {//执行一次
+    $(".loading-modal").remove();//路由初始化可以做一些事
+    this.backUrl='';
+    if($.localStorage){/*清除缓存的临时数据 本项目需要用到*/
+        localStorage.removeItem("area");
+        localStorage.removeItem("footer");
+    }
+}
+user: function(action) {
+    this.loading();
+    require(['apps/user/app'], function (app) {
+       app.main(action);            //传入的参数
+    });
+},
+loading:function(){
+    $.loading();                    //动画
+    $.pageInit();                   //页面初始化配置
+    this.backUrl=window.location.hash;//记录当前路由
+},
+defaultAction: function () {
+    var self =this;
+    layer.open({content:'页面正在开发中',time:1.5});
+    setTimeout(function(){
+        Backbone.history.navigate(self.backUrl,{trigger:!0,replace:!0});//返回上一级
+    },1500);
+}
+</pre>
+
+开始进入页面的app.js
+<pre>
+define(["apps/home/views/main"], function (view) {
+    var urlApi ="data/home.php";//表示数据的url
+    return {
+        main: function() {
+            this.mainView = new view(urlApi);//创建视图
+        }
+    };
+});
+</pre>
+
+先说数据模型models/model.js
+<pre>
+define(function() {
+    return Backbone.Model.extend({
+        initialize:function(url){
+            this.urlApi=url;//初始化的地址
+        },
+        urlRoot:function(){//这里有url和urlRoot，存在一定区别；第三部分会讲解
+            return this.urlApi;
+        }
+    });
+});
+</pre>
+
+数据collections/collections.js；这推荐使用集合分页插件；我在文件中#list中使
+<pre>
+define(["paginator"],function(e) {
+    return Backbone.PageableCollection.extend({
+        initialize:function(url,type,keyword){//传递请求时所带参数如?type=1&keyword=123
+        	this.urlApi=url;
+    		this.type=type;
+    		this.keyword=keyword;
+    	},
+    	url:function(){return this.urlApi},
+    	state: {//从0页开始，每页10个
+			pagesInRange: 0,
+			pageSize: 10,
+		},
+		queryParams: {//所带参数如?page=1&limit=10&type=1&keyword=123
+			totalRecords: null,
+			currentPage: "page",
+			totalPages: null,
+			pageSize: "limit",
+			type:function(){
+				return (this.type!==null?this.type:null);
+			},
+			keyword:function(){
+				return (this.keyword!==null?this.keyword:null);
+			}
+		},
+		parseState: function(resp, queryParams, state,options) {
+			return {
+				totalRecords: resp._count//集合的总数，进行分页
+			};
+		},
+		parseRecords: function(resp,options) {//当前页集合的数据
+			return resp.data;
+		}
+        //更多内容参考请搜索插件
+    });
+});
+</pre>
+
+最后是views/main.js；如果组件不复用，可以选择放在这里，灵活使用trigger的方式，将其他组件触发绑定到main.js事件中；
+<pre>
+define(["doT",
+    "text!apps/home/templates/main.html",
+	"apps/home/models/home",
+	"components/modules/modules",
+	"components/header/view",
+	"components/footer/view",
+	"components/aside/view"],function (doT,tpl,Model,modules,Header,Footer,Aside) {
+   return Backbone.View.extend({
+	    id: "view-home",
+	    template: doT.template(tpl),
+	    events:{},
+	    initialize: function (urlApi) {
+	    	$.setTitle("店铺首页");
+	   		$("#views").append(this.$el);
+	   		this.model = new Model(urlApi);
+	   		this.model.on('sync',this.render,this);//同步渲染
+	   		this.model.fetch({
+                data:{id:123},//请求的地址?id=123
+                /*如果有规范要这么传/123，可以this.model.set({id:123});
+                model.js使用this.get('id')或this.id获取参数*/
+                error:function(){
+                    $.catchError();//处理异常
+                }
+            });
+	    },
+	    render: function () {
+	    	//先渲染布局
+	   		this.$el.html(this.template());
+
+	   		//将组件插入到页面布局中；一、二依托于布局中，三可独立
+	   		var _this=this;
+               
+	   		//组件渲染方式一：1.插入到正常文档流；2.展示由该页面数据模型传入到组件
+	   		$('.view-header').append((new Header()).render().$el)
+               
+			//组件渲染方式二：自定义模块
+	   		$.each(this.model.get("data"),function(index,data) {
+				_this.renderModule(data.type, data.content);
+			});
+            
+			//组件渲染方式三：脱离正常文档流（fixed）
+			var asideView = new Aside();
+            //没有数据，仅展示；当然也可传输参数渲染；
+			var footerView = new Footer();
+            /*1.展示独立加载当前该数据模型，
+            restful方式对Model（这里不涉及Collection）的get，put，destory*/
+            
+            //同样你可以使用footer中的时间回调，比如里面使用this.trigger('test',params)
+            footerView.on('test',function(params){})
+            
+			$.loading("hide");
+        },
+        renderModule: function(type, model) {//通过厉遍形式渲染页面;
+			var Module = require("components/modules/" + type + "/view");
+			var moduleName = $('<div class=modules-' + type + '></div>');
+			$(".view-container", this.$el).append(moduleName);
+        	var moduleView = new Module({model: model});
+			moduleName.html(moduleView.$el);
+			moduleView.render();
+        }
+	});
+});
+</pre>
+
+* 对项目的开发规范要有所约束，减少每个人风格不同，这里只给出了一些简单的渲染；
+* 实践是很重要的，我也是一路磕磕碰碰，页面很多不同逻辑操作需要自己去探索更加有意义
+
 
 ###三、核心部分数据模型增删改查，渲染页面，其他问题
 
@@ -68,4 +276,5 @@ Backbone
 * AngularJS 用此搭建后台管理系统；
 * Node.js 学会搭建服务器； 
 * 加油、加油、一个坚持梦想的男人！
-#####疏漏之处请指正，谢谢！问题意见联系 zrd0921@qq.com
+
+####错误之处请指正，谢谢！问题意见联系 zrd0921@qq.com
