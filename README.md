@@ -93,7 +93,7 @@ $.getUrlParam = function(){/*路由地址?id=123&user=Deot*/};
 
 </pre>
 
-<pre>
+```javascript
 routes: {
     '':'home',                  主页面
     'user(/:action)':'user',    一二三及页面，用于判断页面二三级路由
@@ -101,9 +101,9 @@ routes: {
     'list':'list',              单一页面
     '*actions': 'defaultAction' 404页面
 }
-</pre>
+```
 
-<pre>
+```javascript
 initialize: function () {//执行一次
     $(".loading-modal").remove();//路由初始化可以做一些事
     this.backUrl='';
@@ -130,10 +130,10 @@ defaultAction: function () {
         Backbone.history.navigate(self.backUrl,{trigger:!0,replace:!0});//返回上一级
     },1500);
 }
-</pre>
+```
 
 开始进入页面的app.js
-<pre>
+```javascript
 define(["apps/home/views/main"], function (view) {
     var urlApi ="data/home.php";//表示数据的url
     return {
@@ -142,10 +142,10 @@ define(["apps/home/views/main"], function (view) {
         }
     };
 });
-</pre>
+```
 
 先说数据模型models/model.js
-<pre>
+```javascript
 define(function() {
     return Backbone.Model.extend({
         initialize:function(url){
@@ -156,10 +156,10 @@ define(function() {
         }
     });
 });
-</pre>
+```
 
 数据collections/collections.js；这推荐使用集合分页插件；我在文件中#list中使
-<pre>
+```javascript
 define(["paginator"],function(e) {
     return Backbone.PageableCollection.extend({
         initialize:function(url,type,keyword){//传递请求时所带参数如?type=1&keyword=123
@@ -195,10 +195,10 @@ define(["paginator"],function(e) {
         //更多内容参考请搜索插件
     });
 });
-</pre>
+```
 
 最后是views/main.js；如果组件不复用，可以选择放在这里，灵活使用trigger的方式，将其他组件触发绑定到main.js事件中；
-<pre>
+```javascript
 define(["doT",
     "text!apps/home/templates/main.html",
 	"apps/home/models/home",
@@ -261,7 +261,7 @@ define(["doT",
         }
 	});
 });
-</pre>
+```
 
 * 对项目的开发规范要有所约束，减少每个人风格不同，这里只给出了一些简单的渲染；
 * 实践是很重要的，我也是一路磕磕碰碰，页面很多不同逻辑操作需要自己去探索更加有意义
