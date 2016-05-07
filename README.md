@@ -62,7 +62,7 @@ Backbone
 </pre>
 
 ###二、项目构建
-首页是index.html;
+####1.首页是index.html;
 ```javascript
   var _global= {
         user    : "Deot",
@@ -76,8 +76,8 @@ Backbone
 <div id="popup"></div>              <!--弹出层时渲染到这里；-->
 ```
 接下来就是require->main.js
-####路由部分：route.js
-<pre>
+####2.路由部分：route.js
+```javascript
 //在这里，我们可以定义简单的插件，同样会暴露到全局；复用很方便，所以在这里可以自定义方法；
 $.loading = function(){/*相关loading代码*/};
 //比如加载动画
@@ -87,11 +87,13 @@ $.catchError = function(){/*数据异常时执行*/};
 //数据异常
 $.getUrlParam = function(){/*路由地址?id=123&user=Deot*/};
 //读取URL地址所带信息
+/*
 ．．．．
 ．．．．
 方法还有很多，这里相对于jQuery简单扩展，如果需要比较大的，请放入utils中；
+ */
 
-</pre>
+```
 
 ```javascript
 routes: {
@@ -132,7 +134,7 @@ defaultAction: function () {
 }
 ```
 
-开始进入页面的app.js
+####3.启动页面app.js
 ```javascript
 define(["apps/home/views/main"], function (view) {
     var urlApi ="data/home.php";//表示数据的url
@@ -144,7 +146,7 @@ define(["apps/home/views/main"], function (view) {
 });
 ```
 
-先说数据模型models/model.js
+####4.数据模型models/model.js
 ```javascript
 define(function() {
     return Backbone.Model.extend({
@@ -158,7 +160,7 @@ define(function() {
 });
 ```
 
-数据collections/collections.js；这推荐使用集合分页插件；我在文件中#list中使
+####5.数据集合collections/collections.js；这推荐使用集合分页插件；我在文件中#list中使用过
 ```javascript
 define(["paginator"],function(e) {
     return Backbone.PageableCollection.extend({
@@ -197,7 +199,7 @@ define(["paginator"],function(e) {
 });
 ```
 
-最后是views/main.js；如果组件不复用，可以选择放在这里，灵活使用trigger的方式，将其他组件触发绑定到main.js事件中；
+####6.视图views/main.js；如果组件不复用，可以选择放在这里，灵活使用trigger的方式，将其他组件触发绑定到main.js事件中；
 ```javascript
 define(["doT",
     "text!apps/home/templates/main.html",
