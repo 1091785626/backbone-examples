@@ -12,8 +12,8 @@
 ###项目其他依赖，UI及其他方法自己定义，毕竟Backbone只提供了MVC框架
  
 * doT.js------------------------------模版渲染引擎 替代原有的
-* layer.mobile.js------------------弹出层 顺便将其UI自定义；
-* backbone.paginator.js-------用于项目的集合分页，取代原Backbone集合功能
+* layer.mobile.js-------------------弹出层 顺便将其UI自定义；
+* backbone.paginator.js---------用于项目的集合分页，取代原Backbone集合功能
 * fastclick.js
 * swiper.js
 * .....
