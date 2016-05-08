@@ -7,7 +7,7 @@
 * [Backbone API中文文档](http://www.css88.com/doc/backbone/)
 * [Backbone 使用总结，内存泄漏等](https://segmentfault.com/a/1190000000589218) 
 * [Backbone 的技巧和模式](http://blog.jobbole.com/46420/)
-* [我的启蒙老师：工程化，模块化，组件化](https://github.com/fouber/blog/issues/10)
+* [前端之路：工程化，模块化，组件化](https://github.com/fouber/blog/issues/10)
 
 ###项目其他依赖，UI及其他方法自己定义，毕竟Backbone只提供了MVC框架
  
@@ -18,7 +18,7 @@
 * swiper.js
 * .....
 
-##如果你对构建没有兴趣的话就直接看第三部分
+##如果你对构建没有兴趣的话就直接看第三，四部分
 
 
 ###一、项目的目录及其功能，方便管理
@@ -165,7 +165,7 @@ define(function() {
 define(["paginator"],function(e) {
     return Backbone.PageableCollection.extend({
         initialize:function(url,type,keyword){//传递请求时所带参数如?type=1&keyword=123
-        	this.urlApi=url;
+            this.urlApi=url;
     		this.type=type;
     		this.keyword=keyword;
     	},
@@ -252,6 +252,10 @@ define(["doT",
             footerView.on('test',function(params){})
             
 			$.loading("hide");
+            //对于main.js的回调你可以这么使用
+            Backbone.View.prototype.on('test-main',function(){
+                console.log(123)
+            })
         },
         renderModule: function(type, model) {//通过厉遍形式渲染页面;
 			var Module = require("components/modules/" + type + "/view");
@@ -269,10 +273,238 @@ define(["doT",
 * 实践是很重要的，我也是一路磕磕碰碰，页面很多不同逻辑操作需要自己去探索更加有意义
 
 
-###三、核心部分数据模型增删改查，渲染页面，其他问题
+###三、核心部分数据模型增删改查，和用户挂钩，能保证数据交互是学习的首要
 
 
-###四、个人未来学习方向
+
+[restful_api](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
+
+可以通过简单的php模拟restful的请求；
+
+```php
+<?php
+if($_SERVER['REQUEST_METHOD']=="DELETE"){
+    echo '{"status": 1}';
+}else if($_SERVER['REQUEST_METHOD']=="PUT"){
+    echo '{"status": 1}';
+}else if($_SERVER['REQUEST_METHOD']=="POST"){
+   echo '{"status": 1}'; 
+}else if($_SERVER['REQUEST_METHOD']=="GET"){
+    echo '{"status": 1}';
+}?>
+```
+假如你获取的数据是这样的
+```json
+{
+   "i":123,
+   "style":1
+}
+```
+比如url = /home 
+
+* get------ /home
+* put------ /home/123
+* post----- /home
+* delete----/home/123
+
+数据的请求形式
+
+* GET（SELECT）：从服务器取出资源（一项或多项）。
+* POST（CREATE）：在服务器新建一个资源。
+* PUT（UPDATE）：在服务器更新资源（客户端提供改变后的完整资源）。
+* PATCH（UPDATE）：在服务器更新资源（客户端提供改变的属性）。
+* DELETE（DELETE）：从服务器删除资源。
+
+
+####1.比较规范的restful方式
+使用模型方式urlRoot会判断当前id，在footer组件中可查看相关例子，模拟三种状态
+```javascript
+var model =Backbone.Model.extend({
+    urlRoot:function(){
+        return '/home'
+    }
+})
+```
+```javascript
+//还有就是需要重载url方法
+var model =Backbone.Model.extend({
+    url:function(){
+        return '/home'+this.id?'/'+this.id:''
+    }
+})
+```
+如果你想用集合，在#list可查看相关例子，模拟四种状态
+```javascript
+var collection = Backbone.Collection.extend({
+    url:'/home'
+})
+//在view.js中这样调用
+//put方式请求如下
+var model = this.collection.get('123');
+model.set('style':0);
+model.save(null,{
+    success:function(model,response){},//保存成功执行
+    error:function(model,response,xhr) {}//404//或者其他错误
+});
+```
+数据返回形式
+
+* GET /collection：返回资源对象的列表（数组）
+* GET /collection/resource：返回单个资源对象
+* POST /collection：返回新生成的资源对象
+* PUT /collection/resource：返回完整的资源对象
+* PATCH /collection/resource：返回完整的资源对象
+* DELETE /collection/resource：返回一个空文档
+
+####2.由于一些前期的误区，没有按照正确的restful走，我的项目（移动端商城系统）用了ajax方式请求(例子中不会用到，这里只是本人进入的误区)
+
+* 对于此方法灵活运用也是一种好的方案，不受那么多局限
+* 除了项目集合分页用到集合collection以外，其他均是模型model组成
+* 一个页面一个model用于加载全部数据进行渲染
+* 由于渲染的时候的时候可以通过dom实现双向绑定（绑定键值，比如data-id='123'）；
+* 完全可以通过绑定好的键值的方式，请求数据后操作响应的dom；
+
+model.js
+```javascript
+define(function() {
+    return Backbone.Model.extend({
+        initialize:function(url,type){
+            //还可以传入其他参数比如这个type，如果view使用set，可以用get获取值
+            this.urlApi = url;
+            this.type = type;
+        },
+        url:function(){
+            return this.urlApi+'?type'+this.type;
+        }
+    });
+});
+```
+view.js
+```javascript
+define(["doT","text!apps/home/templates/main.html","apps/home/models/home"],function (doT,tpl,Model) {
+   return Backbone.View.extend({
+        id: "view-home",
+	    template: doT.template(tpl),
+	    events:{
+	    	'click #get':'get',
+	    	'click #put':'put',
+	    	'click #post':'post',
+	    	'click #delete':'delete'
+	    },
+	    initialize: function (urlApi) {
+	    	$.setTitle("店铺首页");
+	   		$("#views").append(this.$el);
+	   		this.model = new Model(urlApi);
+	   		this.model.on('sync',this.render,this);
+	   		this.model.fetch({//这里一get的显示来渲染
+	   			data:{id:123},
+                error:function(){//用于其他put，post，delete的方式；
+                    $.catchError();
+                }
+            });
+            this.virtualModel = new Model(urlApi);//用于其他put，post，delete的方式；
+	    },
+	    render: function () {//渲染页面
+	   		this.$el.html(this.template(this.model.toJSON()));
+        },
+        get:function(event){
+        	this.model.fetch();//get方式，可带参数
+        },
+        put:function(event){//put方式，可带参数
+        	var $this = $(event.currentTarget);
+        	var id = $this.data('id');//获取绑定的键值
+        	this.virtualModel.clear();
+        	this.virtualModel.set({
+        		id:id,//必须有一个id，不然将变为post求情
+        		action:'changeNum',//通常带一个action让后台知道此时的put是操作什么
+        		num:123
+        	});
+        	this.virtualModel.save(null,{
+        		success:function(model,resp){
+        			if(resp.status){//根据后台的值判断执行内容，true，flase
+        				//做相应dom操作
+        			}else{
+
+        			}
+        		}
+        	});
+         },
+         post:function(event){//post方式，可带参数
+        	var $this = $(event.currentTarget);
+        	this.virtualModel.clear();
+        	this.virtualModel.set({//不能带id，通常约定提交数据
+        		num:123,
+        		pay:99,
+        		aid:11
+        	});
+        	this.virtualModel.save(null,{
+        		success:function(model,resp){
+        			if(resp.status){//根据后台的值判断执行内容，true，flase
+        				//做相应dom操作
+        			}else{
+
+        			}
+        		}
+        	});
+         },
+         delete:function(event){
+         	var $this = $(event.currentTarget);
+        	var id = $this.data('id');//获取绑定的键值
+        	$.ajax({
+        		/*由于不是用集合创建的，在页面中列表是用模型创建，
+        		只能用ajax的方法，以上put，post，也可以用ajax，
+        		但是get可以用自带的方式，比较方便，可以使用fetch方式实现刷新页面，基本不闪白
+        		*/
+                dataType:'json',
+                url: self.urlApi,
+                type: "DELETE",
+                data: {id:id}
+            }).done(function (resp) {}).fail(function (resp) {});
+        }
+	});
+});
+```
+* 数据交互上是最让人头疼的，现在也算是get一些门路，没有涉及数据交互的网上案例感觉上用处帮助都不是很大； 
+* 总结：以上方法都可以使用ajax，至于post，put用自带的话，有些功能还可以用到，比如验证；也算是完成项目，最重要的还是学到模块化，组件化，复用的功能绝对不允许复制（写方法或共同引入）。
+
+
+###四、渲染页面等其他问题
+###1.渲染dom和事件相关
+```javascript
+this.$el.html(this.template(data));
+//只是创建了一个节点，你需要插入在dom中，需要使用append
+```
+```javascript
+var view = new Item({model:model})
+$('#views').append(view.render(type).$el)
+/*
+这样前提是使用链式调用(redner中需要return this)，
+不然需要写成view.$el;view.render(type)；
+有时候你在Item中用这样一个操作 $('img.lazy').lazyload();//无法使用
+建议你用this.$('img.lazy').lazyload();
+主要原因在于渲染的节点未在dom中，它已经执行了，你需要绑定在$el中，理解执行顺序也很重要
+*/
+```
+* 平时开发的时候也要主要代码的执行顺序，这个很重要，不然有时都找不到根源
+
+####2.undelegateEvents()和delegateEvents()
+
+一定要注意你的el的用法；有时候为了防止冲突，需要解除绑定。
+主要原因是同一个类绑定的事件，之前的视图没有销毁，导致事件连续触发，
+通常出现于一个页面中弹出层中，重复实列化导致(这也是内存泄漏的原因)；所以你需要对相应的视图做解绑事件绑定，
+更绝的你可以在某个事件之后销毁视图Backbone.View.prototype.remove.call(this);
+
+####3.在组件化中灵活运用trigger；
+
+这个可以跨视图绑定触发相关实践，因为一个页面是由多个组件组成，可以将一些触发带参数传入main.js执行一些操作
+
+####4.项目打包
+模块化，组件化后文件数量比较多，这个时候就需要打包技术了，gulp、grunt是不错的选择；这样文件打包后css只有一个文件（为了首屏加载，你可以额外划分，我的项目通过gzip后只有30kb，所以就不进行划分了，字库是采用iconfont链接引入），一个main.js包括整个的依赖库和常用的方法（不包括第三方定义的插件，如图表，gzip后75kb）；然后就是apps/中每个目录下只留下一个app.js（10-50kb不等），包括整个路由下的页面操作和模版；基本保证首次打开页面在总大小150kb左右；后续页面也只有10-50kb（css、main不再加载）！
+
+* 还有写技巧基本都注释在本文的代码里了，还有些操作可以通过案列熟悉下，最主要的开发还是在于自己的理解。学习是痛苦的，是因为不会，一定要在未知的领域探索，我们拒绝机械劳动！
+
+
+###五、个人未来学习方向
 * gulp、webpack等运用
 * React Native 用js搭建的原生应用，提升自己的javascript；
 * AngularJS 用此搭建后台管理系统；
