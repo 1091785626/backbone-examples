@@ -293,19 +293,6 @@ if($_SERVER['REQUEST_METHOD']=="DELETE"){
     echo '{"status": 1}';
 }?>
 ```
-假如你获取的数据是这样的
-```json
-{
-   "i":123,
-   "style":1
-}
-```
-比如url = /home 
-
-* get------ /home
-* put------ /home/123
-* post----- /home
-* delete----/home/123
 
 数据的请求形式
 
@@ -315,6 +302,19 @@ if($_SERVER['REQUEST_METHOD']=="DELETE"){
 * PATCH（UPDATE）：在服务器更新资源（客户端提供改变的属性）。
 * DELETE（DELETE）：从服务器删除资源。
 
+假如你获取的数据是这样的
+```json
+{
+   "id":123,
+   "style":1
+}
+```
+比如url = /home 
+
+* get------ /home
+* put------ /home/123
+* post----- /home
+* delete----/home/123
 
 ####1.比较规范的restful方式
 使用模型方式urlRoot会判断当前id，在footer组件中可查看相关例子，模拟三种状态
