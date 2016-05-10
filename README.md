@@ -241,7 +241,7 @@ define(["doT",
 				_this.renderModule(data.type, data.content);
 			});
             
-			//组件渲染方式三：脱离正常文档流（fixed）
+			//组件渲染方式三：脱离正常文档流（fixed）；建议少用
 			var asideView = new Aside();
             //没有数据，仅展示；当然也可传输参数渲染；
 			var footerView = new Footer();
