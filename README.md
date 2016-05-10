@@ -495,6 +495,19 @@ $('#views').append(view.render(type).$el)
 更绝的你可以在某个事件之后销毁视图Backbone.View.prototype.remove.call(this);
 
 内存泄漏：当每个页面有复用这个组件，页面切换时造成重复实列化了，之前的事件还存在内存中，你一个事件就有可能触发多次，这个时候就要在dom移除时接触绑定，还有就是你可以单独维护一个视图list；
+还有个办法就是在View初始化的时候,这个比较麻烦，但还算实用；
+
+```javascript
+    this.trigger('remove-compnents-cart');
+    var _this = this;
+    Backbone.View.prototype.on('remove-compnents-cart',function(){
+        //Backbone.View.prototype.remove;
+        Backbone.View.prototype.off();
+        _this.undelegateEvents();
+    })
+```
+
+[视图销毁](http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js)
 
 ####3.在组件化中灵活运用trigger（不过也要注意页面切换时事件没有被销毁的情况）；
 
