@@ -494,20 +494,23 @@ $('#views').append(view.render(type).$el)
 通常出现于一个页面中弹出层中，重复实列化导致(这也是内存泄漏的原因)；所以你需要对相应的视图做解绑事件绑定，
 更绝的你可以在某个事件之后销毁视图Backbone.View.prototype.remove.call(this);
 
-内存泄漏：当每个页面有复用这个组件，页面切换时造成重复实列化了，之前的事件还存在内存中，你一个事件就有可能触发多次，这个时候就要在dom移除时接触绑定，还有就是你可以单独维护一个视图list；
+内存泄漏：当每个页面有复用这个组件，页面切换时造成重复实列化了，之前的事件还存在内存中，你一个事件就有可能触发多次，这个时候就要在dom移除时接触绑定；
 还有个办法就是在View初始化的时候,这个比较麻烦，但还算实用；
 
 ```javascript
     this.trigger('remove-compnents-cart');
     var _this = this;
     Backbone.View.prototype.on('remove-compnents-cart',function(){
-        //Backbone.View.prototype.remove;
+        //Backbone.View.prototype.remove.call(_this);
+        //Backbone.View.prototype.off.call(_this,'remove-compnents-cart');
         Backbone.View.prototype.off();
         _this.undelegateEvents();
     })
 ```
+还有就是你可以单独维护一个视图list,你可以用上面的方式调用原型，创建一个全局list对象（如:_global_list={}），只要 new View()就往list中添加当前_this,再需要的时候统一删除视图;
 
 [视图销毁](http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js)
+
 
 ####3.在组件化中灵活运用trigger（不过也要注意页面切换时事件没有被销毁的情况）；
 
