@@ -507,8 +507,16 @@ $('#views').append(view.render(type).$el)
         _this.undelegateEvents();
     })
 ```
-还有就是你可以单独维护一个视图list,你可以用上面的方式调用原型，创建一个全局list对象（如:_global_list={}），只要 new View()就往list中添加当前_this,再需要的时候统一删除视图;
-
+还有就是你可以单独维护一个视图list,你可以用上面的方式调用原型，创建一个全局list对象（如:路由,_global.routerList=[]）,组件可以是_global.componentList=[]，只要 new View()就往list中添加当前_this,再需要的时候统一删除视图;
+```javascript
+    this.routerName = 'home';
+    _global.routerList.push(this)
+    
+    /*在需要的时候用*/
+    for (var i=0;i<_global.routerList.length;i++){
+        Backbone.View.prototype.remove.call(_global.routerList[i]);
+    }
+```
 [视图销毁](http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js)
 
 
