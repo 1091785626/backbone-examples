@@ -1,244 +1,244 @@
 .diy-conitem:before,
 .diy-conitem:after {
-  display: table;
-  content: " ";
+	display: table;
+	content: " ";
 }
 
 .diy-conitem:after {
-  clear: both;
+	clear: both;
 }
 
 .diy-conitem {
-  position: relative;
+	position: relative;
 }
 
 .diy-rtf img {
-  width: 100%;
+	width: 100%;
 }
 
 /*title*/
 .diy-title {
-  width: 100%;
-  line-height: 4.0rem;
-  height: 4rem;
-  color: #fff;
-  background: white;
+	width: 100%;
+	line-height: 4.0rem;
+	height: 4rem;
+	color: #fff;
+	background: white;
 }
 .diy-title h3 {
-  padding: 0 1rem;
-  display: inline-block;
+	padding: 0 1rem;
+	display: inline-block;
 }
 
 .title-style-1 {
-  background: #28c192;
+	background: #28c192;
 }
 
 .title-style-2 h3 {
-  box-shadow: inset 0 -2px 0 0 #f94358;
-  color: #707070;
+	box-shadow: inset 0 -2px 0 0 #f94358;
+	color: #707070;
 }
 
 .title-style-3 {
-  color: #707070;
+	color: #707070;
 }
 
 .title-style-3 h3 {
-  position: absolute;
-  z-index: 11;
-  background: white;
+	position: absolute;
+	z-index: 11;
+	background: white;
 }
 
 .title-style-3.tr h3 {
-  right: 1rem;
+	right: 1rem;
 }
 
 .title-style-3.tc h3 {
-  right: 50%;
-  transform: translateX(50%);
+	right: 50%;
+	transform: translateX(50%);
 }
 
 .title-style-3.tl h3 {
-  left: 1rem;
+	left: 1rem;
 }
 
 .title-style-3 span {
-  position: absolute;
-  bottom: 2rem;
-  left: 0;
-  height: 2px;
-  width: 100%;
-  background: #d3d3d3;
-  z-index: 10;
+	position: absolute;
+	bottom: 2rem;
+	left: 0;
+	height: 2px;
+	width: 100%;
+	background: #d3d3d3;
+	z-index: 10;
 }
 
 .title-style-4 {
-  border-left: solid 2px #f94358;
-  color: #707070;
+	border-left: solid 2px #f94358;
+	color: #707070;
 }
 
 /*search*/
 .diy-search {
-  overflow: hidden;
-  position: relative;
+	overflow: hidden;
+	position: relative;
 }
 .diy-search input {
-  width: 100%;
-  border-radius: 4px;
-  border: 1px solid #e6e9ed;
-  height: 3.5rem;
-  padding-left: 1rem;
-  appearance: none;
-  -webkit-appearance: none;
+	width: 100%;
+	border-radius: 4px;
+	border: 1px solid #e6e9ed;
+	height: 3.5rem;
+	padding-left: 1rem;
+	appearance: none;
+	-webkit-appearance: none;
 }
 .diy-search input:focus {
-  outline: none;
-  border-color: rgba(255, 110, 81, 0.5);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 5px rgba(81, 167, 232, 0.5);
+	outline: none;
+	border-color: rgba(255, 110, 81, 0.5);
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 5px rgba(81, 167, 232, 0.5);
 }
 .diy-search input:focus + button[type='submit'] {
-  color: rgba(255, 110, 81, 0.8);
+	color: rgba(255, 110, 81, 0.8);
 }
 .diy-search button[type='submit'] {
-  width: 15%;
-  background: white;
-  padding-bottom: .6rem;
-  position: absolute;
-  border-radius: 4px;
-  bottom: 1px;
-  right: 2px;
-  color: #999;
+	width: 15%;
+	background: white;
+	padding-bottom: .6rem;
+	position: absolute;
+	border-radius: 4px;
+	bottom: 1px;
+	right: 2px;
+	color: #999;
 }
 .diy-search i {
-  font-size: 2.0rem;
-  padding-left: 1rem;
+	font-size: 2.0rem;
+	padding-left: 1rem;
 }
 
 /*text_nav*/
 .diy-text-nav {
-  border-radius: 2px;
-  border: 1px solid #e6e9ed;
+	border-radius: 2px;
+	border: 1px solid #e6e9ed;
 }
 .diy-text-nav a {
-  display: block;
+	display: block;
 }
 .diy-text-nav li {
-  padding: 0 1rem;
-  width: 100%;
+	padding: 0 1rem;
+	width: 100%;
 }
 .diy-text-nav a:not(:last-child) {
-  border-bottom: 1px solid #e6e9ed;
+	border-bottom: 1px solid #e6e9ed;
 }
 
 /*img_nav*/
 .diy-img-nav-1 {
-  overflow: hidden;
+	overflow: hidden;
 }
 .diy-img-nav-1 li {
-  width: 25%;
-  float: left;
-  position: relative;
-  padding: 2px;
+	width: 25%;
+	float: left;
+	position: relative;
+	padding: 2px;
 }
 .diy-img-nav-1 li img {
-  width: 100%;
+	width: 100%;
 }
 .diy-img-nav-1 li div {
-  position: absolute;
-  width: 80%;
-  border-radius: 1.5rem;
-  text-align: center;
-  color: white;
-  right: 50%;
-  transform: translateX(50%);
-  bottom: .5rem;
+	position: absolute;
+	width: 80%;
+	border-radius: 1.5rem;
+	text-align: center;
+	color: white;
+	right: 50%;
+	transform: translateX(50%);
+	bottom: .5rem;
 }
 
 .diy-img-nav-2 {
-  overflow: hidden;
+	overflow: hidden;
 }
 .diy-img-nav-2 li {
-  width: 48%;
-  float: left;
-  position: relative;
-  line-height: 4rem;
-  margin: 1%;
-  border-radius: 4px;
-  padding: 5px;
-  background: white;
+	width: 48%;
+	float: left;
+	position: relative;
+	line-height: 4rem;
+	margin: 1%;
+	border-radius: 4px;
+	padding: 5px;
+	background: white;
 }
 .diy-img-nav-2 li img {
-  width: 4rem;
-  margin-right: .5rem;
-  float: left;
+	width: 4rem;
+	margin-right: .5rem;
+	float: left;
 }
 
 .diy-img-nav-3 {
-  overflow: hidden;
+	overflow: hidden;
 }
 .diy-img-nav-3 li {
-  width: 25%;
-  float: left;
-  background: white;
-  padding: 1px;
+	width: 25%;
+	float: left;
+	background: white;
+	padding: 1px;
 }
 .diy-img-nav-3 li img {
-  width: 100%;
+	width: 100%;
 }
 .diy-img-nav-3 li div {
-  text-align: center;
+	text-align: center;
 }
 
 .diy-conitem-off {
-  border-top: 1px dashed #ddd;
-  margin: .5rem 0;
+	border-top: 1px dashed #ddd;
+	margin: .5rem 0;
 }
 
 /*top_nav*/
 .diy-top-nav-1 li {
-  float: left;
-  line-height: 4.0rem;
+	float: left;
+	line-height: 4.0rem;
 }
 
 .diy-top-nav-2 img {
-  display: inline-block;
-  width: 2.0rem;
-  margin: .5rem 0;
+	display: inline-block;
+	width: 2.0rem;
+	margin: .5rem 0;
 }
 .diy-top-nav-2 li {
-  float: left;
-  padding: .5rem 0;
+	float: left;
+	padding: .5rem 0;
 }
 
 /*showcase*/
 .diy-showcase-1 .col-6 {
-  position: relative;
+	position: relative;
 }
 .diy-showcase-1 img {
-  width: 100%;
+	width: 100%;
 }
 .diy-showcase-1 span {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  color: white;
-  background: rgba(0, 0, 0, 0.4);
-  text-align: left;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	color: white;
+	background: rgba(0, 0, 0, 0.4);
+	text-align: left;
 }
 
 .diy-showcase-2 .col-4 {
-  position: relative;
-  width: 32%;
+	position: relative;
+	width: 32%;
 }
 .diy-showcase-2 img {
-  width: 100%;
+	width: 100%;
 }
 .diy-showcase-2 span {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  color: white;
-  background: rgba(0, 0, 0, 0.4);
-  text-align: left;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	color: white;
+	background: rgba(0, 0, 0, 0.4);
+	text-align: left;
 }

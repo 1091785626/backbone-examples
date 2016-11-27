@@ -1,6 +1,14 @@
+> 此段话写于 2016-10-01:
+
+当做过React,Redux项目,才真正理解单向数据流的概念（数据=视图），回顾此项目更多的是针对dom直接修改视图；
+
+* 如果想快速开发一个webapp，并且做到管理好项目结构，维护起来方便，可以了解此项目；
+* 如果想体会（算法+数据结构=程序），我建议你使用React+Redux做一项目，感受一下数据的流动～～，当然这个周边的技术栈还是比较多的；
+#
+> 以下内容写于 2016-05-01
 #Backbone+RequireJS
 ###选择的原因：
-入门简单，可依赖jQuery，MVC模式，最主要的原因在于公司移动端项目没人负责，扛起大旗研究了一番，一路磕磕碰碰，完成底层搭建和后期工作完成整个项目。给我带来最大的帮助模块化和组件化，以及工具等相关自定义和插件的运用。这里主要介绍项目的搭建和一些注意用法，可以下载后用wampserver直接运行测试数据（有点遗憾是一开始没有工程化的思想）
+入门简单，可依赖jQuery，MVC模式，最主要的原因在于公司移动端项目没人负责，扛起大旗研究了一番，一路磕磕碰碰，完成底层搭建和后期工作完成整个项目。给我带来最大的帮助模块化和组件化，以及工具等相关自定义和插件的运用。这里主要介绍项目的搭建和一些注意用法，可以下载后用wampserver直接运行测试数据（有点遗憾是一开始没有自动化工程的思想）
 ###感谢促使我一路成长各大社区论坛，好心人。
 感谢以下的博客
 
@@ -65,9 +73,9 @@ Backbone
 ####1.首页是index.html;
 ```javascript
   var _global= {
-        user    : "Deot",
-        id      : 123,
-        mobile  :123
+		user    : "Deot",
+		id      : 123,
+		mobile  :123
   };//全局变量 _global.mobile可以变成一个经常复用的参数等.....
 ```
 ```html
@@ -97,80 +105,80 @@ $.getUrlParam = function(){/*路由地址?id=123&user=Deot*/};
 
 ```javascript
 routes: {
-    '':'home',                  主页面
-    'user(/:action)':'user',    一二三及页面，用于判断页面二三级路由
-    'goods/:id':'goods',        带参数
-    'list':'list',              单一页面
-    '*actions': 'defaultAction' 404页面
+	'':'home',                  主页面
+	'user(/:action)':'user',    一二三及页面，用于判断页面二三级路由
+	'goods/:id':'goods',        带参数
+	'list':'list',              单一页面
+	'*actions': 'defaultAction' 404页面
 }
 ```
 
 ```javascript
 initialize: function () {//执行一次
-    $(".loading-modal").remove();//路由初始化可以做一些事
-    this.backUrl='';
-    if($.localStorage){/*清除缓存的临时数据 本项目需要用到*/
-        localStorage.removeItem("area");
-        localStorage.removeItem("footer");
-    }
+	$(".loading-modal").remove();//路由初始化可以做一些事
+	this.backUrl='';
+	if($.localStorage){/*清除缓存的临时数据 本项目需要用到*/
+		localStorage.removeItem("area");
+		localStorage.removeItem("footer");
+	}
 }
 user: function(action) {
-    this.loading();
-    require(['apps/user/app'], function (app) {
-       app.main(action);            //传入的参数
-    });
+	this.loading();
+	require(['apps/user/app'], function (app) {
+	   app.main(action);            //传入的参数
+	});
 },
 loading:function(){
-    $.loading();                    //动画
-    $.pageInit();                   //页面初始化配置
-    this.backUrl=window.location.hash;//记录当前路由
+	$.loading();                    //动画
+	$.pageInit();                   //页面初始化配置
+	this.backUrl=window.location.hash;//记录当前路由
 },
 defaultAction: function () {
-    var self =this;
-    layer.open({content:'页面正在开发中',time:1.5});
-    setTimeout(function(){
-        Backbone.history.navigate(self.backUrl,{trigger:!0,replace:!0});//返回上一级
-    },1500);
+	var self =this;
+	layer.open({content:'页面正在开发中',time:1.5});
+	setTimeout(function(){
+		Backbone.history.navigate(self.backUrl,{trigger:!0,replace:!0});//返回上一级
+	},1500);
 }
 ```
 
 ####3.启动页面app.js
 ```javascript
 define(["apps/home/views/main"], function (view) {
-    var urlApi ="data/home.php";//表示数据的url
-    return {
-        main: function() {
-            this.mainView = new view(urlApi);//创建视图
-        }
-    };
+	var urlApi ="data/home.php";//表示数据的url
+	return {
+		main: function() {
+			this.mainView = new view(urlApi);//创建视图
+		}
+	};
 });
 ```
 
 ####4.数据模型models/model.js
 ```javascript
 define(function() {
-    return Backbone.Model.extend({
-        initialize:function(url){
-            this.urlApi=url;//初始化的地址
-        },
-        urlRoot:function(){//这里有url和urlRoot，存在一定区别；第三部分会讲解
-            return this.urlApi;
-        }
-    });
+	return Backbone.Model.extend({
+		initialize:function(url){
+			this.urlApi=url;//初始化的地址
+		},
+		urlRoot:function(){//这里有url和urlRoot，存在一定区别；第三部分会讲解
+			return this.urlApi;
+		}
+	});
 });
 ```
 
 ####5.数据集合collections/collections.js；这推荐使用集合分页插件；我在文件中#list中使用过
 ```javascript
 define(["paginator"],function(e) {
-    return Backbone.PageableCollection.extend({
-        initialize:function(url,type,keyword){//传递请求时所带参数如?type=1&keyword=123
-            this.urlApi=url;
-    		this.type=type;
-    		this.keyword=keyword;
-    	},
-    	url:function(){return this.urlApi},
-    	state: {//从0页开始，每页10个
+	return Backbone.PageableCollection.extend({
+		initialize:function(url,type,keyword){//传递请求时所带参数如?type=1&keyword=123
+			this.urlApi=url;
+			this.type=type;
+			this.keyword=keyword;
+		},
+		url:function(){return this.urlApi},
+		state: {//从0页开始，每页10个
 			pagesInRange: 0,
 			pageSize: 10,
 		},
@@ -194,77 +202,78 @@ define(["paginator"],function(e) {
 		parseRecords: function(resp,options) {//当前页集合的数据
 			return resp.data;
 		}
-        //更多内容参考请搜索插件
-    });
+		//更多内容参考请搜索插件
+	});
 });
 ```
 
 ####6.视图views/main.js；如果组件不复用，可以选择放在这里，灵活使用trigger的方式，将其他组件触发绑定到main.js事件中；
 ```javascript
 define(["doT",
-    "text!apps/home/templates/main.html",
+	"text!apps/home/templates/main.html",
 	"apps/home/models/home",
 	"components/modules/modules",
 	"components/header/view",
 	"components/footer/view",
-	"components/aside/view"],function (doT,tpl,Model,modules,Header,Footer,Aside) {
+	"components/aside/view"
+],function (doT,tpl,Model,modules,Header,Footer,Aside) {
    return Backbone.View.extend({
-	    id: "view-home",
-	    template: doT.template(tpl),
-	    events:{},
-	    initialize: function (urlApi) {
-	    	$.setTitle("店铺首页");
-	   		$("#views").append(this.$el);
-	   		this.model = new Model(urlApi);
-	   		this.model.on('sync',this.render,this);//同步渲染
-	   		this.model.fetch({
-                data:{id:123},//请求的地址?id=123
-                /*如果有规范要这么传/123，可以this.model.set({id:123});
-                model.js使用this.get('id')或this.id获取参数*/
-                error:function(){
-                    $.catchError();//处理异常
-                }
-            });
-	    },
-	    render: function () {
-	    	//先渲染布局
-	   		this.$el.html(this.template());
+		id: "view-home",
+		template: doT.template(tpl),
+		events:{},
+		initialize: function (urlApi) {
+			$.setTitle("店铺首页");
+			$("#views").append(this.$el);
+			this.model = new Model(urlApi);
+			this.model.on('sync',this.render,this);//同步渲染
+			this.model.fetch({
+				data:{id:123},//请求的地址?id=123
+				/*如果有规范要这么传/123，可以this.model.set({id:123});
+				model.js使用this.get('id')或this.id获取参数*/
+				error:function(){
+					$.catchError();//处理异常
+				}
+			});
+		},
+		render: function () {
+			//先渲染布局
+			this.$el.html(this.template());
 
-	   		//将组件插入到页面布局中；一、二依托于布局中，三可独立
-	   		var _this=this;
-               
-	   		//组件渲染方式一：1.插入到正常文档流；2.展示由该页面数据模型传入到组件
-	   		$('.view-header').append((new Header()).render().$el)
-               
+			//将组件插入到页面布局中；一、二依托于布局中，三可独立
+			var _this=this;
+			   
+			//组件渲染方式一：1.插入到正常文档流；2.展示由该页面数据模型传入到组件
+			$('.view-header').append((new Header()).render().$el)
+			   
 			//组件渲染方式二：自定义模块
-	   		$.each(this.model.get("data"),function(index,data) {
+			$.each(this.model.get("data"),function(index,data) {
 				_this.renderModule(data.type, data.content);
 			});
-            
+			
 			//组件渲染方式三：脱离正常文档流（fixed）；建议少用
 			var asideView = new Aside();
-            //没有数据，仅展示；当然也可传输参数渲染；
+			//没有数据，仅展示；当然也可传输参数渲染；
 			var footerView = new Footer();
-            /*1.展示独立加载当前该数据模型，
-            restful方式对Model（这里不涉及Collection）的get，put，destory*/
-            
-            //同样你可以使用footer中的时间回调，比如里面使用this.trigger('test',params)
-            footerView.on('test',function(params){})
-            
+			/*1.展示独立加载当前该数据模型，
+			restful方式对Model（这里不涉及Collection）的get，put，destory*/
+			
+			//同样你可以使用footer中的时间回调，比如里面使用this.trigger('test',params)
+			footerView.on('test',function(params){})
+			
 			$.loading("hide");
-            //对于main.js的回调你可以这么使用
-            Backbone.View.prototype.on('test-main',function(){
-                console.log(123)
-            })
-        },
-        renderModule: function(type, model) {//通过厉遍形式渲染页面;
+			//对于main.js的回调你可以这么使用
+			Backbone.View.prototype.on('test-main',function(){
+				console.log(123)
+			})
+		},
+		renderModule: function(type, model) {//通过厉遍形式渲染页面;
 			var Module = require("components/modules/" + type + "/view");
 			var moduleName = $('<div class=modules-' + type + '></div>');
 			$(".view-container", this.$el).append(moduleName);
-        	var moduleView = new Module({model: model});
+			var moduleView = new Module({model: model});
 			moduleName.html(moduleView.$el);
 			moduleView.render();
-        }
+		}
 	});
 });
 ```
@@ -284,13 +293,13 @@ define(["doT",
 ```php
 <?php
 if($_SERVER['REQUEST_METHOD']=="DELETE"){
-    echo '{"status": 1}';
+	echo '{"status": 1}';
 }else if($_SERVER['REQUEST_METHOD']=="PUT"){
-    echo '{"status": 1}';
+	echo '{"status": 1}';
 }else if($_SERVER['REQUEST_METHOD']=="POST"){
    echo '{"status": 1}'; 
 }else if($_SERVER['REQUEST_METHOD']=="GET"){
-    echo '{"status": 1}';
+	echo '{"status": 1}';
 }?>
 ```
 
@@ -320,31 +329,31 @@ if($_SERVER['REQUEST_METHOD']=="DELETE"){
 使用模型方式urlRoot会判断当前id，在footer组件中可查看相关例子，模拟三种状态
 ```javascript
 var model =Backbone.Model.extend({
-    urlRoot:function(){
-        return '/home'
-    }
+	urlRoot:function(){
+		return '/home'
+	}
 })
 ```
 ```javascript
 //还有就是需要重载url方法
 var model =Backbone.Model.extend({
-    url:function(){
-        return '/home'+this.id?'/'+this.id:''
-    }
+	url:function(){
+		return '/home'+this.id?'/'+this.id:''
+	}
 })
 ```
 如果你想用集合，在#list可查看相关例子，模拟四种状态
 ```javascript
 var collection = Backbone.Collection.extend({
-    url:'/home'
+	url:'/home'
 })
 //在view.js中这样调用
 //put方式请求如下
 var model = this.collection.get('123');
 model.set('style':0);
 model.save(null,{
-    success:function(model,response){},//保存成功执行
-    error:function(model,response,xhr) {}//404//或者其他错误
+	success:function(model,response){},//保存成功执行
+	error:function(model,response,xhr) {}//404//或者其他错误
 });
 ```
 数据返回形式
@@ -368,100 +377,100 @@ model.save(null,{
 model.js
 ```javascript
 define(function() {
-    return Backbone.Model.extend({
-        initialize:function(url,type){
-            //还可以传入其他参数比如这个type，如果view使用set，可以用get获取值
-            this.urlApi = url;
-            this.type = type;
-        },
-        url:function(){
-            return this.urlApi+'?type'+this.type;
-        }
-    });
+	return Backbone.Model.extend({
+		initialize:function(url,type){
+			//还可以传入其他参数比如这个type，如果view使用set，可以用get获取值
+			this.urlApi = url;
+			this.type = type;
+		},
+		url:function(){
+			return this.urlApi+'?type'+this.type;
+		}
+	});
 });
 ```
 view.js
 ```javascript
 define(["doT","text!apps/home/templates/main.html","apps/home/models/home"],function (doT,tpl,Model) {
    return Backbone.View.extend({
-        id: "view-home",
-	    template: doT.template(tpl),
-	    events:{
-	    	'click #get':'get',
-	    	'click #put':'put',
-	    	'click #post':'post',
-	    	'click #delete':'delete'
-	    },
-	    initialize: function (urlApi) {
-	    	$.setTitle("店铺首页");
-	   		$("#views").append(this.$el);
-	   		this.model = new Model(urlApi);
-	   		this.model.on('sync',this.render,this);
-	   		this.model.fetch({//这里一get的显示来渲染
-	   			data:{id:123},
-                error:function(){//用于其他put，post，delete的方式；
-                    $.catchError();
-                }
-            });
-            this.virtualModel = new Model(urlApi);//用于其他put，post，delete的方式；
-	    },
-	    render: function () {//渲染页面
-	   		this.$el.html(this.template(this.model.toJSON()));
-        },
-        get:function(event){
-        	this.model.fetch();//get方式，可带参数
-        },
-        put:function(event){//put方式，可带参数
-        	var $this = $(event.currentTarget);
-        	var id = $this.data('id');//获取绑定的键值
-        	this.virtualModel.clear();
-        	this.virtualModel.set({
-        		id:id,//必须有一个id，不然将变为post求情
-        		action:'changeNum',//通常带一个action让后台知道此时的put是操作什么
-        		num:123
-        	});
-        	this.virtualModel.save(null,{
-        		success:function(model,resp){
-        			if(resp.status){//根据后台的值判断执行内容，true，flase
-        				//做相应dom操作
-        			}else{
+		id: "view-home",
+		template: doT.template(tpl),
+		events:{
+			'click #get':'get',
+			'click #put':'put',
+			'click #post':'post',
+			'click #delete':'delete'
+		},
+		initialize: function (urlApi) {
+			$.setTitle("店铺首页");
+			$("#views").append(this.$el);
+			this.model = new Model(urlApi);
+			this.model.on('sync',this.render,this);
+			this.model.fetch({//这里一get的显示来渲染
+				data:{id:123},
+				error:function(){//用于其他put，post，delete的方式；
+					$.catchError();
+				}
+			});
+			this.virtualModel = new Model(urlApi);//用于其他put，post，delete的方式；
+		},
+		render: function () {//渲染页面
+			this.$el.html(this.template(this.model.toJSON()));
+		},
+		get:function(event){
+			this.model.fetch();//get方式，可带参数
+		},
+		put:function(event){//put方式，可带参数
+			var $this = $(event.currentTarget);
+			var id = $this.data('id');//获取绑定的键值
+			this.virtualModel.clear();
+			this.virtualModel.set({
+				id:id,//必须有一个id，不然将变为post求情
+				action:'changeNum',//通常带一个action让后台知道此时的put是操作什么
+				num:123
+			});
+			this.virtualModel.save(null,{
+				success:function(model,resp){
+					if(resp.status){//根据后台的值判断执行内容，true，flase
+						//做相应dom操作
+					}else{
 
-        			}
-        		}
-        	});
-         },
-         post:function(event){//post方式，可带参数
-        	var $this = $(event.currentTarget);
-        	this.virtualModel.clear();
-        	this.virtualModel.set({//不能带id，通常约定提交数据
-        		num:123,
-        		pay:99,
-        		aid:11
-        	});
-        	this.virtualModel.save(null,{
-        		success:function(model,resp){
-        			if(resp.status){//根据后台的值判断执行内容，true，flase
-        				//做相应dom操作
-        			}else{
+					}
+				}
+			});
+		 },
+		 post:function(event){//post方式，可带参数
+			var $this = $(event.currentTarget);
+			this.virtualModel.clear();
+			this.virtualModel.set({//不能带id，通常约定提交数据
+				num:123,
+				pay:99,
+				aid:11
+			});
+			this.virtualModel.save(null,{
+				success:function(model,resp){
+					if(resp.status){//根据后台的值判断执行内容，true，flase
+						//做相应dom操作
+					}else{
 
-        			}
-        		}
-        	});
-         },
-         delete:function(event){
-         	var $this = $(event.currentTarget);
-        	var id = $this.data('id');//获取绑定的键值
-        	$.ajax({
-        		/*由于不是用集合创建的，在页面中列表是用模型创建，
-        		只能用ajax的方法，以上put，post，也可以用ajax，
-        		但是get可以用自带的方式，比较方便，可以使用fetch方式实现刷新页面，基本不闪白
-        		*/
-                dataType:'json',
-                url: self.urlApi,
-                type: "DELETE",
-                data: {id:id}
-            }).done(function (resp) {}).fail(function (resp) {});
-        }
+					}
+				}
+			});
+		 },
+		 delete:function(event){
+			var $this = $(event.currentTarget);
+			var id = $this.data('id');//获取绑定的键值
+			$.ajax({
+				/*由于不是用集合创建的，在页面中列表是用模型创建，
+				只能用ajax的方法，以上put，post，也可以用ajax，
+				但是get可以用自带的方式，比较方便，可以使用fetch方式实现刷新页面，基本不闪白
+				*/
+				dataType:'json',
+				url: self.urlApi,
+				type: "DELETE",
+				data: {id:id}
+			}).done(function (resp) {}).fail(function (resp) {});
+		}
 	});
 });
 ```
@@ -499,24 +508,24 @@ $('#views').append(view.render(type).$el)
 还有个办法就是在View初始化的时候,这个比较麻烦，但还算实用；
 
 ```javascript
-    this.trigger('remove-compnents-cart');
-    var _this = this;
-    Backbone.View.prototype.on('remove-compnents-cart',function(){
-        //Backbone.View.prototype.remove.call(_this);
-        //Backbone.View.prototype.off.call(_this,'remove-compnents-cart');
-        Backbone.View.prototype.off();
-        _this.undelegateEvents();
-    })
+	this.trigger('remove-compnents-cart');
+	var _this = this;
+	Backbone.View.prototype.on('remove-compnents-cart',function(){
+		//Backbone.View.prototype.remove.call(_this);
+		//Backbone.View.prototype.off.call(_this,'remove-compnents-cart');
+		Backbone.View.prototype.off();
+		_this.undelegateEvents();
+	})
 ```
 还有就是你可以单独维护一个视图list,你可以用上面的方式调用原型，创建一个全局list对象（如:路由,_global.routerList=[]）,组件可以是_global.componentList=[]，只要 new View()就往list中添加当前_this,再需要的时候统一删除视图;
 ```javascript
-    this.routerName = 'home';
-    _global.routerList.push(this)
-    
-    /*在需要的时候用*/
-    for (var i=0;i<_global.routerList.length;i++){
-        Backbone.View.prototype.remove.call(_global.routerList[i]);
-    }
+	this.routerName = 'home';
+	_global.routerList.push(this)
+	
+	/*在需要的时候用*/
+	for (var i=0;i<_global.routerList.length;i++){
+		Backbone.View.prototype.remove.call(_global.routerList[i]);
+	}
 ```
 [视图销毁](http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js)
 

@@ -2,24 +2,24 @@
 header('content-type:application/json;'); 
 if($_SERVER['REQUEST_METHOD']=="DELETE"){
 
-    echo json_encode(array("status"=>1));
+	echo json_encode(array("status"=>1));
 
 }else if($_SERVER['REQUEST_METHOD']=="PUT"){
 
-    echo json_encode(array("status"=>true));
+	echo json_encode(array("status"=>true));
 
 }else if($_SERVER['REQUEST_METHOD']=="POST"){
 
    // echo json_encode(array("status"=>true));
-    echo '{
-        "status": 1,
-        "id": 123
-    }';
+	echo '{
+		"status": 1,
+		"id": 123
+	}';
 }
 else{
-    echo '{
-        "id":159
-    }';
+	echo '{
+		"id":159
+	}';
 }
 /*
 id      手机好，可以不写

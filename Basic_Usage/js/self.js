@@ -1,1 +1,1 @@
-define(["self/loading","self/validity","self/device","self/head"], function () {});
+define(["self/utils", "self/validity", "self/device"], function() {});

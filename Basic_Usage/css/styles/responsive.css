@@ -1,19 +1,19 @@
 @media(min-width: 375px) {
-    html {
-    font-size:73.2421875%;
-  }
+	html {
+		font-size:73.2421875%;
+	}
 }
 @media(min-width: 414px) {
-    html {
-    font-size:80.859375%;
-  }
+	html {
+		font-size:80.859375%;
+	}
 }
 @media (min-width: 414px) and (orientation:landscape){/*portrait*/
-  body{max-width: 414px;margin:0 auto;}
+	body{max-width: 414px;margin:0 auto;}
 	.bg-fixed{max-width: 414px;}
 	.fixed{max-width: 414px;}
 	.media-fixed{max-width: 414px;}
-  .swiper-goods-imgs{height: 414px!important;}
-  .swiper-banner{height: 320px!important;}
-  .scroll-fixed{max-width: 414px;}
+	.swiper-goods-imgs{height: 414px!important;}
+	.swiper-banner{height: 320px!important;}
+	.scroll-fixed{max-width: 414px;}
 }

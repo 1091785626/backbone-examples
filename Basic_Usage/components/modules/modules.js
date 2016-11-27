@@ -3,4 +3,4 @@ define([
 	"components/modules/title/view",
 	"components/modules/search/view",
 	"components/modules/notice/view"
-],function(){});
+], function() {});
