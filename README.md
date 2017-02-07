@@ -375,7 +375,7 @@ model.save(null,{
 * 一个页面一个model用于加载全部数据进行渲染
 * 由于渲染的时候的时候可以通过dom实现绑定（绑定键值，比如data-id='123'）；
 * 完全可以通过绑定好的键值的方式，请求数据后操作响应的dom；
-* Backbone属于单向数据流，因为没有按照restful走且没有设计数据源，就手动操作dom了。
+* Backbone中的render单向数据流，因为没有按照restful走且没有设计数据源，就手动操作dom了。
 
 
 1. 单向数据流，从源数据中直接获取‘渲染’（Backbone中的render）；
